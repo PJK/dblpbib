@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["PJK"]
   spec.email         = ["me@pavelkalvoda.com"]
 
-  spec.summary       = %q{Automatically create bibliographies for BibTeX DBLP references.}
+  spec.summary       = Dblpbib::DESCRIPTION
   spec.description   = %q{Automatically create bibliographies for BibTeX DBLP references. This utility is meant to be invoked during LaTeX build. It scans the documents for DBLP references and compiles a cached .bib file. Correctly handles crosslinking. Entries can be overridden. Other bibliography sources can still be included.}
   spec.homepage      = "https://github.com/PJK/dblpbib"
   spec.license       = "MIT"
@@ -24,4 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+
+  spec.add_dependency "commander"
 end

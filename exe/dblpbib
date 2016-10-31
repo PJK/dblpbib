@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+
+require 'commander'
+require 'fileutils'
+require 'open-uri'
+
+require 'dblpbib/version'
+
+class DBLPCLI
+	include Commander::Methods
+
+	def run
+		program :name, 'DBLP BibTeX utility'
+		program :description, Dblpbib::DESCRIPTION
+		program :version, Dblpbib::VERSION
+
+		command :fetch do |command|
+			command.syntax = 'INPUT.tex'
+			command.description = 'Fetches all references to the local cache, if not already present'
+
+			command.option '--cache CACHE_DIR', String, 'Cache directory. Single .bib entries are stored here'
+
+			command.action do |args, options|
+				options.default cache: '.dblp'
+
+				FileUtils.mkdir_p(options.cache)
+
+				keys = IO.read(args[0]).scan(/\\cite\{DBLP:([^}]+)\}/).map(&:pop)
+
+				keys.each do |key|
+					path = File.join(options.cache, key + '.bib')
+
+					unless File.exist?(path)
+						puts "Fetching #{key}"
+
+						FileUtils.mkdir_p(File.dirname(path))
+						File.write(path, open("http://dblp.uni-trier.de/rec/bib1/#{key}.bib").read)
+
+						# TODO: crossrefs! When I got here I actually realized the 'standard' output is perfectly OK for most situations...
+					end
+				end
+			end
+
+			
+		end
+
+		run!
+	end
+end
+
+DBLPCLI.new.run
