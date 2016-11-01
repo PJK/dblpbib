@@ -68,6 +68,8 @@ class DBLPCLI
 			end
 		end
 
+		default_command :build
+
 		run!
 	end
 end
