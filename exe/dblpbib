@@ -11,26 +11,42 @@ require 'dblpbib/version'
 class DBLPCLI
 	include Commander::Methods
 
+	def shared_options(command)
+		command.option '--cache CACHE_DIR', String, 'Cache directory. Single .bib entries are stored here'
+		command.option '--output OUTPUT.bib', String, 'Output bibliography. "dblp.bib" by default'
+	end
+
+	def default_options(options)
+		options.default cache: '.dblp'
+		options.default output: 'dblp.bib'
+	end
+
+	def get_keys(file)
+		IO.read(file).scan(/\\cite\{DBLP:([^}]+)\}/).map(&:pop)
+	end
+
+	def bib_path(cache, key)
+		File.join(cache, key + '.bib')
+	end
+
 	def run
 		program :name, 'DBLP BibTeX utility'
 		program :description, Dblpbib::DESCRIPTION
 		program :version, Dblpbib::VERSION
 
-		command :fetch do |command|
+		command :build do |command|
 			command.syntax = 'INPUT.tex'
-			command.description = 'Fetches all references to the local cache, if not already present'
-
-			command.option '--cache CACHE_DIR', String, 'Cache directory. Single .bib entries are stored here'
+			command.description = 'Fetches references to cache and compiles them'
+			shared_options(command)
 
 			command.action do |args, options|
-				options.default cache: '.dblp'
-
+				default_options(options)
 				FileUtils.mkdir_p(options.cache)
 
-				keys = IO.read(args[0]).scan(/\\cite\{DBLP:([^}]+)\}/).map(&:pop)
+				keys = get_keys(args[0])
 
 				keys.each do |key|
-					path = File.join(options.cache, key + '.bib')
+					path = bib_path(options.cache, key)
 
 					unless File.exist?(path)
 						puts "Fetching #{key}"
@@ -41,9 +57,15 @@ class DBLPCLI
 						# TODO: crossrefs! When I got here I actually realized the 'standard' output is perfectly OK for most situations...
 					end
 				end
-			end
 
-			
+				File.open(options.output, 'w') do |output|
+					output.truncate(0)
+
+					keys.each do |key|
+						output.write(File.read(bib_path(options.cache, key)))
+					end
+				end
+			end
 		end
 
 		run!
