@@ -1,6 +1,6 @@
 # DBLPBib
 
-Automatically create bibliographies for BibTeX DBLP references. Pretty much like [this](https://github.com/grundprinzip/dblp), but actually works and is as sane as LaTeX permits.
+Automatically create bibliographies for BibTeX [DBLP](http://dblp2.uni-trier.de/) references. Pretty much like [this](https://github.com/grundprinzip/dblp), but actually works and is as sane as LaTeX permits.
 
 This utility enables me (and possibly you, no promises) to use DBLP references (e.g. `\cite{DBLP:books/sp/Gratzer16}`) without having to download the BibTeX entries. Just use them as usual and run `dblpbib p_np_proof.tex`, `dblp.bib` will be created in the directory.
 
