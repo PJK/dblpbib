@@ -1,28 +1,24 @@
-# Dblpbib
+# DBLPBib
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dblpbib`. To experiment with that code, run `bin/console` for an interactive prompt.
+Automatically create bibliographies for BibTeX DBLP references. Pretty much like (this)[https://github.com/grundprinzip/dblp], but actually works and is as sane as LaTeX permits.
 
-TODO: Delete this and the text above, and describe your gem
+This utility enables me (and possibly you, no promises) to use DBLP references (e.g. `\cite{DBLP:books/sp/Gratzer16}`) without having to download the BibTeX entries. Just use them as usual and run `dblpbib p_np_proof.tex`, `dblp.bib` will be created in the directory.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'dblpbib'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install dblpbib
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ dblpbib -h
+
+## `latexmk` integration
+
+Stick this in your `.latexmkrc`:
+
+```perl
+$pdflatex = "dblpbib %S && pdflatex -synctex=1 -halt-on-error %O %S";
+```
 
 ## Development
 
@@ -32,7 +28,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/dblpbib.
+Bug reports and pull requests are welcome on GitHub at https://github.com/PJK/dblpbib.
 
 
 ## License
