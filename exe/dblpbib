@@ -22,7 +22,10 @@ class DBLPCLI
 	end
 
 	def get_keys(file)
-		IO.read(file).scan(/\\cite\{DBLP:([^}]+)\}/).map(&:pop)
+		IO.read(file).scan(/\\cite(\[.+\])?\{([^}]+)\}/)
+			.map(&:pop)
+			.flat_map { |keyset| keyset.split(',') }
+			.map(&:strip)
 	end
 
 	def bib_path(cache, key)
@@ -44,6 +47,7 @@ class DBLPCLI
 				FileUtils.mkdir_p(options.cache)
 
 				keys = get_keys(args[0])
+				puts keys.inspect
 
 				keys.each do |key|
 					path = bib_path(options.cache, key)
