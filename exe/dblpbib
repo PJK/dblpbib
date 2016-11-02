@@ -26,6 +26,7 @@ class DBLPCLI
 			.map(&:pop)
 			.flat_map { |keyset| keyset.split(',') }
 			.map(&:strip)
+			.uniq
 			.keep_if { |key| key.start_with?('DBLP:') }
 			.map { |key| key.sub('DBLP:', '') }
 	end
