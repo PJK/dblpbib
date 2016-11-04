@@ -22,7 +22,9 @@ class DBLPCLI
 	end
 
 	def get_keys(file)
-		IO.read(file).scan(/\\cite(\[.+\])?\{([^}]+)\}/)
+		IO.read(file)
+			.gsub(/%.*$/, '')
+			.scan(/\\cite(\[.+\])?\{([^}]+)\}/)
 			.map(&:pop)
 			.flat_map { |keyset| keyset.split(',') }
 			.map(&:strip)
