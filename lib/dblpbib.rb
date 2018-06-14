@@ -5,7 +5,7 @@ module Dblpbib
 	def self.scan_keys(document)
 		document
 			.gsub(/(?<!\\)%.*$/, '')
-			.scan(/\\cite(\[[^\]]+\])?\{([^\}]+)\}/)
+			.scan(/\\cite(|(al)?[pt]\*?|year(par)?|author\*?)(\[[^\]]+\])?\{([^\}]+)\}/)
 			.map(&:pop)
 			.flat_map { |keyset| keyset.split(',') }
 			.map(&:strip)
