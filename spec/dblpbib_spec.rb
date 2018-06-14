@@ -82,5 +82,39 @@ describe Dblpbib do
 				).to contain_exactly('journals/jsc/CoppersmithW90')
 			end
 		end
+
+		describe 'related commands' do
+			[
+				'cite',
+				'autocite',
+				'citet',
+				'citet*',
+				'citep',
+				'citep*',
+				'citeauthor',
+				'citeauthor*',
+				'citeyear',
+				'citeyear*',
+				'citeyearpar',
+				'citealt',
+				'citealp',
+				'citetext'
+			].each do |command|
+				it "recognizes #{command}" do
+					expect(
+						Dblpbib.scan_keys("\\#{command}{DBLP:journals/jsc/CoppersmithW90}")
+					).to contain_exactly('journals/jsc/CoppersmithW90')
+				end
+
+				it "recognizes #{command} with options" do
+					expect(
+						Dblpbib.scan_keys(
+							"\\#{command}[tricky=#{command},more=5]" \
+							  '{DBLP:journals/jsc/CoppersmithW90}'
+						)
+					).to contain_exactly('journals/jsc/CoppersmithW90')
+				end
+			end
+		end
 	end
 end

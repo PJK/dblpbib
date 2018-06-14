@@ -1,7 +1,10 @@
+# Plain wrong :)
 Layout/Tab:
   Enabled: false
 Layout/IndentationWidth:
   Width: 1
+
+# Just annoying
 Metrics/AbcSize:
   Enabled: false
 Metrics/AbcSize:
@@ -9,4 +12,8 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Enabled: false
 Metrics/MethodLength:
+  Enabled: false
+
+# Multiline regexes
+Style/RegexpLiteral:
   Enabled: false
