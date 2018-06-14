@@ -24,7 +24,7 @@ describe Dblpbib do
 		end
 
 		it "ignores comments" do
-			expect(Dblpbib.scan_keys(<<~EOS
+			expect(Dblpbib.scan_keys(<<-EOS
 				// EOS\cite{DBLP:journals/jsc/CoppersmithW90}
 			EOS
 			)).to be_empty
