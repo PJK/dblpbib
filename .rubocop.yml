@@ -2,8 +2,5 @@ Layout/Tab:
   Enabled: false
 Layout/IndentationWidth:
   Width: 1
-Metrics/BlockLength:
-  Exclude:
-    - 'Gemfile'
-    - 'Rakefile'
-    - 'spec/**/*.rb'
+Metrics:
+  Enabled: false

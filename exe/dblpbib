@@ -8,12 +8,21 @@ require 'open-uri'
 
 require 'dblpbib/version'
 
+# Top-level CLI app
 class DBLPCLI
 	include Commander::Methods
 
 	def shared_options(command)
-		command.option '--cache CACHE_DIR', String, 'Cache directory. Single .bib entries are stored here'
-		command.option '--output OUTPUT.bib', String, 'Output bibliography. "dblp.bib" by default'
+		command.option(
+			'--cache CACHE_DIR',
+			String,
+			'Cache directory. Single .bib entries are stored here'
+		)
+		command.option(
+			'--output OUTPUT.bib',
+			String,
+			'Output bibliography. \'dblp.bib\' by default'
+		)
 	end
 
 	def default_options(options)
@@ -44,20 +53,22 @@ class DBLPCLI
 				keys.each do |key|
 					path = bib_path(options.cache, key)
 
-					unless File.exist?(path)
-						puts "Fetching #{key}"
+					next if File.exist?(path)
 
-						FileUtils.mkdir_p(File.dirname(path))
+					puts "Fetching #{key}"
+					FileUtils.mkdir_p(File.dirname(path))
 
-						begin
-							File.write(path, open("http://dblp.uni-trier.de/rec/bib1/#{key}.bib").read)
-						rescue OpenURI::HTTPError => e
-							puts "Failed to fetch key #{key} (#{e}) -- perhaps it is misspelled or doesn't exist?"
-							exit 1
-						end
-
-						# TODO: crossrefs! When I got here I actually realized the 'standard' output is perfectly OK for most situations...
+					begin
+						File.write(
+							path,
+							open("http://dblp.uni-trier.de/rec/bib1/#{key}.bib").read
+						)
+					rescue OpenURI::HTTPError => e
+						puts "Failed to fetch key #{key} (#{e}) -- perhaps it is misspelled or doesn't exist?"
+						exit 1
 					end
+
+					# TODO: crossrefs! When I got here I actually realized the 'standard' output is perfectly OK for most situations...
 				end
 
 				File.open(options.output, 'w') do |output|

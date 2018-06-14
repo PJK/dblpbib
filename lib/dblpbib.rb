@@ -1,5 +1,6 @@
-require "dblpbib/version"
+require 'dblpbib/version'
 
+# Bits of logic
 module Dblpbib
 	def self.scan_keys(document)
 		document
