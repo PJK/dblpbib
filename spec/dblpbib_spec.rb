@@ -85,6 +85,7 @@ describe Dblpbib do
 
 		describe 'related commands' do
 			[
+				'cite',
 				'autocite',
 				'citet',
 				'citet*',
@@ -102,6 +103,12 @@ describe Dblpbib do
 				it "recognizes #{command}" do
 					expect(
 						Dblpbib.scan_keys("\\#{command}{DBLP:journals/jsc/CoppersmithW90}")
+					).to contain_exactly('journals/jsc/CoppersmithW90')
+				end
+
+				it "recognizes #{command} with options" do
+					expect(
+						Dblpbib.scan_keys("\\#{command}[tricky=#{command},more=5]{DBLP:journals/jsc/CoppersmithW90}")
 					).to contain_exactly('journals/jsc/CoppersmithW90')
 				end
 			end
