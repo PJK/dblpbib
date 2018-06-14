@@ -21,18 +21,6 @@ class DBLPCLI
 		options.default output: 'dblp.bib'
 	end
 
-	def get_keys(file)
-		IO.read(file)
-			.gsub(/(?<!\\)%.*$/, '')
-			.scan(/\\cite(\[[^\]]+\])?\{([^\}]+)\}/)
-			.map(&:pop)
-			.flat_map { |keyset| keyset.split(',') }
-			.map(&:strip)
-			.uniq
-			.keep_if { |key| key.start_with?('DBLP:') }
-			.map { |key| key.sub('DBLP:', '') }
-	end
-
 	def bib_path(cache, key)
 		File.join(cache, key + '.bib')
 	end
@@ -51,7 +39,7 @@ class DBLPCLI
 				default_options(options)
 				FileUtils.mkdir_p(options.cache)
 
-				keys = get_keys(args[0])
+				keys = Dblpbib.scan_keys(IO.read(args[0]))
 
 				keys.each do |key|
 					path = bib_path(options.cache, key)
