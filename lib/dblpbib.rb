@@ -6,7 +6,14 @@ module Dblpbib
 		# TODO: Extract the allowed command names, possible make them configurable
 		document
 			.gsub(/(?<!\\)%.*$/, '')
-			.scan(/\\(text|auto)?cite(|(al)?[pt]\*?|year(par|\*)?|par\*?|author\*?|text|)(\[[^\]]+\])?\{([^\}]+)\}/)
+			.scan(%r{
+				# Command
+				\\(text|auto)?cite(|(al)?[pt]\*?|year(par|\*)?|par\*?|author\*?|text|)
+				# Optionally options
+				(\[[^\]]+\])?
+				# Parameters
+				\{([^\}]+)\}
+			}x)
 			.map(&:pop)
 			.flat_map { |keyset| keyset.split(',') }
 			.map(&:strip)
